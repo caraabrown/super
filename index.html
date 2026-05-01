@@ -1,1 +1,696 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Shipper — Launch OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090F;--bc:#0E1320;--be:#141B2D;--br:#1C2840;--t:#E2E8F0;--m:#4A5A78;--d:#8896AA;--em:#0FD98A;--sa:#4F8EF7;--am:#9B6DFF;--ab:#F5A623;--ru:#F05A6A;--te:#00D4C8;--fd:'Oswald',sans-serif;--fb:'Lato',sans-serif;--fh:'Bebas Neue',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:var(--fb);min-height:100vh;line-height:1.6}
+#gpb{position:fixed;top:0;left:0;right:0;height:3px;background:var(--br);z-index:9999}
+#gpf{height:100%;background:linear-gradient(90deg,var(--em),var(--sa),var(--am),var(--ab));transition:width .6s ease;border-radius:0 2px 2px 0}
+header{position:sticky;top:3px;z-index:100;background:rgba(7,9,15,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--br);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.lgo{display:flex;align-items:center;gap:11px}
+.lmk{width:30px;height:30px;background:linear-gradient(135deg,var(--am),var(--sa));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:14px;color:#fff}
+.lnm{font-family:var(--fh);font-size:20px;letter-spacing:.08em;background:linear-gradient(90deg,var(--t) 60%,var(--am));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ltg{font-size:9px;color:var(--m);letter-spacing:.15em;text-transform:uppercase;margin-top:-3px}
+.hctrl{display:flex;align-items:center;gap:9px}
+.tlbl{font-size:10px;color:var(--m);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+#tok{background:var(--be);border:1px solid var(--br);color:var(--t);padding:5px 9px;border-radius:6px;font-size:12px;font-family:monospace;width:185px;outline:none;transition:border-color .2s}
+#tok:focus{border-color:var(--sa)}#tok::placeholder{color:var(--m)}
+.btn{border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-family:var(--fd);font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btp{background:var(--sa);color:#fff}.btp:hover{background:#3A78F0;transform:translateY(-1px)}
+.bts{background:transparent;color:var(--d);border:1px solid var(--br)}.bts:hover{border-color:var(--d);color:var(--t)}
+.sst{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--m);min-width:82px}
+.sdt{width:6px;height:6px;border-radius:50%;background:var(--m);transition:background .3s}
+.sdt.saving{background:var(--ab);animation:blk .8s infinite}.sdt.saved{background:var(--em)}.sdt.error{background:var(--ru)}
+@keyframes blk{0%,100%{opacity:1}50%{opacity:.2}}
+.rvs{background:var(--bc);border-bottom:1px solid var(--br);padding:11px 24px;display:flex;align-items:center;gap:28px}
+.rvt{flex:1;min-width:0}
+.rvtop{display:flex;align-items:baseline;gap:9px;margin-bottom:5px}
+.rva{font-family:var(--fh);font-size:30px;letter-spacing:.05em;cursor:pointer;color:var(--em)}
+.rvo{font-family:var(--fd);font-size:13px;color:var(--m)}
+.rvg{font-family:var(--fh);font-size:20px;color:var(--d);cursor:pointer}
+.rvbw{height:7px;background:var(--be);border-radius:4px;overflow:hidden}
+.rvbf{height:100%;background:linear-gradient(90deg,var(--em),var(--te));transition:width .6s ease;border-radius:4px}
+.rvp{font-size:10px;color:var(--m);margin-top:3px}
+.rbtn{font-size:10px;background:rgba(15,217,138,.1);color:var(--em);border:1px solid rgba(15,217,138,.2);padding:3px 9px;border-radius:4px;cursor:pointer;font-family:var(--fd);letter-spacing:.06em;transition:all .2s}
+.rbtn:hover{background:rgba(15,217,138,.2)}
+.rvdiv{width:1px;height:44px;background:var(--br);flex-shrink:0}
+.cdb{flex-shrink:0;text-align:center}
+.cdl{font-size:9px;color:var(--m);letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
+.cdt{display:flex;align-items:center;gap:5px}
+.cdu{text-align:center}
+.cdn{font-family:var(--fh);font-size:24px;letter-spacing:.05em;line-height:1;color:var(--ab)}
+.cdul{font-size:9px;color:var(--m);text-transform:uppercase;letter-spacing:.08em}
+.cdsep{font-family:var(--fh);font-size:20px;color:var(--br);margin-top:-3px}
+.cdset{font-size:10px;color:var(--sa);cursor:pointer;text-decoration:underline;margin-top:3px;font-family:var(--fd);letter-spacing:.06em}
+.cdexp{font-family:var(--fh);font-size:16px;color:var(--ru)}
+main{max-width:1120px;margin:0 auto;padding:22px 24px}
+.nbsp{background:var(--bc);border:1px solid var(--br);border-left:3px solid var(--te);border-radius:12px;padding:16px 20px;margin-bottom:22px}
+.nbstop{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.nbslbl{display:flex;align-items:center;gap:8px}
+.nbsttl{font-family:var(--fd);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--te)}
+.nbsbody{display:flex;align-items:center;gap:14px}
+.nbsbadge{font-family:var(--fd);font-size:10px;letter-spacing:.1em;padding:4px 9px;border-radius:4px;background:var(--be);white-space:nowrap;flex-shrink:0}
+.nbstxt{font-family:var(--fd);font-size:26px;font-weight:600;letter-spacing:.02em;color:var(--t);line-height:1.2}
+.nbsmt{font-size:13px;color:var(--m);font-style:italic}
+.ftog{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--m);cursor:pointer;background:none;border:1px solid var(--br);border-radius:20px;padding:4px 11px 4px 6px;font-family:var(--fb);transition:all .2s}
+.ftog:hover{border-color:var(--m)}.ftog.on{border-color:var(--te);color:var(--te)}
+.tpill{width:24px;height:13px;background:var(--br);border-radius:7px;position:relative;transition:background .2s}
+.tpill::after{content:'';position:absolute;width:8px;height:8px;background:var(--m);border-radius:50%;top:2.5px;left:2.5px;transition:all .2s}
+.ftog.on .tpill{background:rgba(0,212,200,.3)}.ftog.on .tpill::after{left:13.5px;background:var(--te)}
+.tnav{display:flex;border-bottom:1px solid var(--br);margin-bottom:22px;overflow-x:auto}
+.tbn{padding:9px 16px;font-family:var(--fd);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--m);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
+.tbn:hover{color:var(--d)}.tbn.active{color:var(--t);border-bottom-color:var(--am)}
+.tp{display:none}.tp.active{display:block}
+.stages{display:flex;flex-direction:column;gap:13px}
+.sc{background:var(--bc);border:1px solid var(--br);border-radius:12px;overflow:hidden;transition:opacity .3s,box-shadow .3s}
+.sc.locked{opacity:.35;pointer-events:none}
+.sc:not(.locked):hover{box-shadow:0 4px 20px rgba(0,0,0,.4)}
+body.fm .sc:not(.io){opacity:.2;pointer-events:none}
+body.fm .sc.io{opacity:1!important;pointer-events:all}
+.sh{display:flex;align-items:center;gap:15px;padding:15px 19px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:rgba(255,255,255,.02)}
+.rw{position:relative;width:48px;height:48px;flex-shrink:0}
+.rw svg{transform:rotate(-90deg)}
+.rbg{fill:none;stroke:var(--br);stroke-width:3.5}
+.rfg{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-dasharray:125.7;stroke-dashoffset:125.7;transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1)}
+.rnum{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--fd);font-size:13px;font-weight:700}
+.sinf{flex:1;min-width:0}
+.seb{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--m);margin-bottom:1px}
+.sn{font-family:var(--fd);font-size:17px;font-weight:600;letter-spacing:.03em}
+.sd{font-size:11px;color:var(--m);margin-top:2px;font-weight:300}
+.sstat{text-align:right;flex-shrink:0}
+.sfrac{font-family:var(--fd);font-size:18px;font-weight:600}
+.slbl{font-size:9px;color:var(--m);letter-spacing:.1em;text-transform:uppercase}
+.chv{color:var(--m);flex-shrink:0;transition:transform .25s}
+.sc.io .chv{transform:rotate(180deg)}
+.sbdy{display:none;padding:0 19px 19px}
+.sc.io .sbdy{display:block}
+.sdiv{height:1px;background:var(--br);margin-bottom:14px}
+.cban{display:none;align-items:center;gap:9px;background:rgba(15,217,138,.07);border:1px solid rgba(15,217,138,.18);border-radius:8px;padding:9px 14px;margin-bottom:13px;font-family:var(--fd);font-size:11px;letter-spacing:.1em;color:var(--em)}
+.cban.show{display:flex}
+.ci{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid rgba(28,40,64,.5)}
+.ci:last-child{border-bottom:none}
+.cb{width:17px;height:17px;border-radius:4px;border:2px solid var(--br);flex-shrink:0;cursor:pointer;position:relative;margin-top:3px;transition:all .15s}
+.cb:hover{border-color:var(--d)}.cb.ck{animation:cpop .3s ease}
+.cb.ck::after{content:'';position:absolute;width:3px;height:7px;border-right:2px solid #07090F;border-bottom:2px solid #07090F;transform:rotate(45deg);top:1px;left:5px}
+@keyframes cpop{0%{transform:scale(1)}45%{transform:scale(1.35)}100%{transform:scale(1)}}
+.cc{flex:1;min-width:0}
+.ct{font-size:13px;line-height:1.5;transition:color .2s}
+.ci.dn .ct{color:var(--m);text-decoration:line-through}
+.cmta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+.tchp{font-size:10px;color:var(--m);background:var(--be);padding:2px 6px;border-radius:3px;font-family:var(--fd);letter-spacing:.04em}
+.lchp{font-size:10px;text-decoration:none;background:rgba(79,142,247,.1);color:var(--sa);padding:2px 7px;border-radius:3px;font-family:var(--fd);letter-spacing:.04em;display:inline-flex;align-items:center;gap:3px;transition:all .15s}
+.lchp:hover{background:rgba(79,142,247,.2);color:#93C5FD}
+.ntog{font-size:10px;color:var(--m);background:none;border:none;cursor:pointer;font-family:var(--fb);padding:0;transition:color .15s}
+.ntog:hover{color:var(--d)}
+.na{display:none;margin-top:6px}.na.open{display:block}
+.na textarea{width:100%;background:var(--be);border:1px solid var(--br);border-radius:5px;color:var(--t);font-family:var(--fb);font-size:12px;padding:7px 10px;resize:none;min-height:48px;outline:none;transition:border-color .2s;line-height:1.5}
+.na textarea:focus{border-color:var(--am)}.na textarea::placeholder{color:var(--m)}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.dayc{background:var(--bc);border:1px solid var(--br);border-radius:9px;padding:11px;cursor:pointer;transition:all .2s;position:relative}
+.dayc:hover{border-color:var(--d);transform:translateY(-1px)}.dayc.dn{opacity:.5}
+.daynum{font-family:var(--fh);font-size:21px;line-height:1;margin-bottom:3px}
+.daytsk{font-size:10px;color:var(--d);line-height:1.4}
+.dayc.dn .daytsk{text-decoration:line-through;color:var(--m)}
+.daychk{position:absolute;top:7px;right:7px;width:13px;height:13px;border-radius:3px;border:1.5px solid var(--br);cursor:pointer;transition:all .15s}
+.daychk.dn{background:var(--em);border-color:var(--em)}
+.daychk.dn::after{content:'';position:absolute;width:3px;height:6px;border-right:1.5px solid #07090F;border-bottom:1.5px solid #07090F;transform:rotate(45deg);top:0;left:4px}
+.dn-area{display:none;margin-top:7px}.dayc.no .dn-area{display:block}
+.dn-area textarea{width:100%;background:var(--be);border:1px solid var(--br);border-radius:5px;color:var(--t);font-family:var(--fb);font-size:10px;padding:5px 7px;resize:none;min-height:38px;outline:none}
+.dn-area textarea:focus{border-color:var(--am)}
+.sech{margin-bottom:36px}
+.sectit{font-family:var(--fd);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--m);padding-bottom:11px;border-bottom:1px solid var(--br);margin-bottom:15px}
+.crmt{width:100%;border-collapse:collapse;font-size:13px}
+.crmt th{font-family:var(--fd);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--m);padding:7px 11px;text-align:left;border-bottom:1px solid var(--br)}
+.crmt td{padding:7px 11px;border-bottom:1px solid rgba(28,40,64,.4);vertical-align:middle}
+.crmt tr:hover td{background:rgba(255,255,255,.013)}
+.crmi{background:none;border:none;color:var(--t);font-family:var(--fb);font-size:13px;width:100%;outline:none;padding:2px 0}
+.crmi::placeholder{color:var(--m)}
+.ssel{background:var(--be);border:1px solid var(--br);color:var(--t);font-family:var(--fd);font-size:9px;letter-spacing:.06em;padding:3px 7px;border-radius:4px;outline:none;cursor:pointer}
+.dbn{background:none;border:none;color:var(--m);cursor:pointer;font-size:16px;padding:0 3px;transition:color .15s;line-height:1}
+.dbn:hover{color:var(--ru)}
+.arb{display:flex;align-items:center;gap:6px;background:none;border:1px dashed var(--br);color:var(--m);border-radius:7px;padding:7px 14px;font-family:var(--fd);font-size:11px;letter-spacing:.08em;cursor:pointer;width:100%;margin-top:7px;transition:all .2s}
+.arb:hover{border-color:var(--d);color:var(--d)}
+.hkgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:28px}
+.hkcard{background:var(--bc);border:1px solid var(--br);border-radius:10px;padding:15px}
+.hknum{font-family:var(--fh);font-size:26px;color:rgba(155,109,255,.15);line-height:1;margin-bottom:5px}
+.hksug{font-size:11px;color:var(--m);font-style:italic;margin-bottom:7px;line-height:1.5;border-left:2px solid var(--am);padding-left:7px}
+.hkcard textarea{width:100%;background:var(--be);border:1px solid var(--br);border-radius:6px;color:var(--t);font-family:var(--fb);font-size:12px;padding:8px 10px;resize:none;min-height:64px;outline:none;transition:border-color .2s;line-height:1.5}
+.hkcard textarea:focus{border-color:var(--am)}.hkcard textarea::placeholder{color:var(--m);font-style:italic;font-size:11px}
+.hkst{display:flex;gap:5px;margin-top:7px}
+.hs{font-size:9px;font-family:var(--fd);letter-spacing:.06em;padding:3px 9px;border-radius:3px;cursor:pointer;border:1px solid var(--br);color:var(--m);transition:all .15s}
+.hs.ad{background:rgba(245,166,35,.1);border-color:var(--ab);color:var(--ab)}
+.hs.ar{background:rgba(15,217,138,.1);border-color:var(--em);color:var(--em)}
+.hs.ap{background:rgba(79,142,247,.1);border-color:var(--sa);color:var(--sa)}
+.objl{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.objc{background:var(--bc);border:1px solid var(--br);border-radius:10px;padding:15px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.objq{font-family:var(--fd);font-size:14px;color:var(--ru);font-weight:500;letter-spacing:.02em;margin-bottom:3px}
+.objh{font-size:11px;color:var(--m);line-height:1.5}
+.objc textarea{background:var(--be);border:1px solid var(--br);border-radius:6px;color:var(--t);font-family:var(--fb);font-size:12px;padding:8px 10px;resize:none;min-height:78px;outline:none;transition:border-color .2s;line-height:1.5;width:100%}
+.objc textarea:focus{border-color:var(--em)}.objc textarea::placeholder{color:var(--m);font-style:italic;font-size:11px}
+.spgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.spcard{background:var(--bc);border:1px solid var(--br);border-top:2px solid var(--em);border-radius:10px;padding:15px;position:relative}
+.spq{font-size:12px;color:var(--d);line-height:1.6;font-style:italic;margin-bottom:10px}
+.spa{font-family:var(--fd);font-size:11px;letter-spacing:.06em;color:var(--em)}
+.spr{font-size:10px;color:var(--m)}
+.spdl{position:absolute;top:9px;right:9px;background:none;border:none;color:var(--m);cursor:pointer;font-size:14px;line-height:1;transition:color .15s}
+.spdl:hover{color:var(--ru)}
+.spaddf{background:var(--bc);border:1px dashed var(--br);border-radius:10px;padding:15px}
+.spaddf textarea,.spaddf input{width:100%;background:var(--be);border:1px solid var(--br);border-radius:5px;color:var(--t);font-family:var(--fb);font-size:12px;padding:7px 10px;outline:none;transition:border-color .2s;margin-bottom:7px}
+.spaddf textarea{resize:none;min-height:58px}.spaddf textarea:focus,.spaddf input:focus{border-color:var(--em)}
+.spaddf input::placeholder,.spaddf textarea::placeholder{color:var(--m)}
+.sarow{display:flex;gap:7px}.sarow input{flex:1;margin-bottom:0}
+.cpybtn{font-size:10px;background:rgba(15,217,138,.1);color:var(--em);border:1px solid rgba(15,217,138,.2);padding:3px 9px;border-radius:4px;cursor:pointer;font-family:var(--fd);letter-spacing:.06em;transition:all .2s;white-space:nowrap}
+.cpybtn:hover{background:rgba(15,217,138,.2)}
+.mett{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px}
+.mett th{font-family:var(--fd);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--m);padding:9px 13px;text-align:left;border-bottom:1px solid var(--br)}
+.mett td{padding:9px 13px;border-bottom:1px solid rgba(28,40,64,.4)}
+.mett tr:hover td{background:rgba(255,255,255,.013)}
+.mett input{background:none;border:none;color:var(--t);font-family:var(--fb);font-size:13px;width:100%;outline:none;text-align:right}
+.mett input::placeholder{color:var(--m)}
+.wklbl{font-family:var(--fd);font-size:12px;letter-spacing:.08em;color:var(--ab)}
+.mhi{color:var(--em);font-family:var(--fd);font-size:13px}
+.bmsec{margin-bottom:38px}
+.bmh{font-family:var(--fd);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--m);padding-bottom:11px;border-bottom:1px solid var(--br);margin-bottom:16px}
+.bmcw{background:var(--br);border-radius:10px;overflow:hidden;border:1px solid var(--br)}
+.bmct{display:grid;grid-template-columns:1fr 1fr 1.2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;min-height:240px}
+.bmcc{background:var(--bc);padding:12px 14px;display:flex;flex-direction:column;min-height:112px}
+.bmcc.vp{grid-row:1/3;min-height:224px;border-left:2px solid rgba(155,109,255,.3);border-right:2px solid rgba(155,109,255,.3)}
+.bmcc.kp,.bmcc.cs{grid-row:1/3}
+.bmcb{display:grid;grid-template-columns:1fr 1fr;gap:1px;min-height:92px}
+.bml{font-family:var(--fd);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--m);margin-bottom:7px;flex-shrink:0}
+.bmcc.vp .bml{color:var(--am)}
+.bmcc textarea{flex:1;background:none;border:none;color:var(--t);font-family:var(--fb);font-size:11.5px;resize:none;outline:none;line-height:1.6;width:100%;min-height:52px}
+.bmcc textarea::placeholder{color:var(--m);font-style:italic;font-size:11px}
+.posb{background:var(--bc);border:1px solid var(--br);border-left:3px solid var(--am);border-radius:10px;padding:16px 18px}
+.posl{font-family:var(--fd);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--am);margin-bottom:9px}
+.posb textarea{width:100%;background:none;border:none;color:var(--t);font-family:var(--fb);font-size:13px;line-height:1.7;resize:none;outline:none;min-height:64px}
+.posb textarea::placeholder{color:var(--m);font-style:italic}
+.vpgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.vpc{background:var(--bc);border:1px solid var(--br);border-top:2px solid var(--em);border-radius:10px;padding:14px}
+.vpn{font-family:var(--fh);font-size:32px;color:rgba(15,217,138,.1);line-height:1;margin-bottom:5px}
+.vpc textarea{width:100%;background:none;border:none;color:var(--t);font-family:var(--fb);font-size:12.5px;resize:none;outline:none;min-height:72px;line-height:1.6}
+.vpc textarea::placeholder{color:var(--m);font-style:italic;font-size:11.5px}
+.psgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.psc{background:var(--bc);border:1px solid var(--br);border-top:2px solid var(--sa);border-radius:10px;padding:13px}
+.psn{width:100%;background:none;border:none;border-bottom:1px solid var(--br);color:var(--t);font-family:var(--fd);font-size:12px;letter-spacing:.04em;padding-bottom:6px;margin-bottom:9px;outline:none}
+.psn::placeholder{color:var(--m)}
+.psb{width:100%;background:none;border:none;color:var(--d);font-family:var(--fb);font-size:11.5px;line-height:1.6;resize:none;outline:none;min-height:86px}
+.psb::placeholder{color:var(--m);font-style:italic;font-size:11px}
+#cc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;display:none;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--bc);border:1px solid var(--br);border-radius:12px;padding:26px;min-width:300px;max-width:460px;width:90%}
+.modal-ttl{font-family:var(--fd);font-size:15px;letter-spacing:.08em;margin-bottom:16px}
+.modal input{width:100%;background:var(--be);border:1px solid var(--br);border-radius:6px;color:var(--t);font-family:var(--fb);font-size:14px;padding:9px 12px;outline:none;margin-bottom:13px}
+.modal input:focus{border-color:var(--sa)}
+.modal-btns{display:flex;gap:9px;justify-content:flex-end}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--br);border-radius:3px}
+</style>
+</head>
+<body>
+<div id="gpb"><div id="gpf" style="width:0%"></div></div>
+<canvas id="cc"></canvas>
+<div class="modal-ov" id="modal">
+  <div class="modal">
+    <div class="modal-ttl" id="mttl">Update</div>
+    <input type="text" id="minp" placeholder="">
+    <div class="modal-btns">
+      <button class="btn bts" onclick="closeModal()">Cancel</button>
+      <button class="btn btp" onclick="confirmModal()">Update</button>
+    </div>
+  </div>
+</div>
+<header>
+  <div class="lgo"><div class="lmk">SS</div><div><div class="lnm">Super Shipper</div><div class="ltg">Launch OS</div></div></div>
+  <div class="hctrl">
+    <div class="sst"><div class="sdt" id="sdt"></div><span id="stxt">Not saved</span></div>
+    <span class="tlbl">GitHub PAT</span>
+    <input type="password" id="tok" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    <button class="btn bts" onclick="loadFromGist()">Load</button>
+    <button class="btn btp" onclick="saveToGist()">↑ Save</button>
+  </div>
+</header>
+<div class="rvs">
+  <div class="rvt">
+    <div class="rvtop">
+      <span class="rva" onclick="openModal('amount')" title="Click to update">$<span id="rvn">0</span></span>
+      <span class="rvo">of</span>
+      <span class="rvg" onclick="openModal('goal')">$<span id="rvgn">10,000</span></span>
+      <button class="rbtn" onclick="openModal('amount')">+ Add Sale</button>
+    </div>
+    <div class="rvbw"><div class="rvbf" id="rvb" style="width:0%"></div></div>
+    <div class="rvp" id="rvp">0% of goal · $10,000 to go</div>
+  </div>
+  <div class="rvdiv"></div>
+  <div class="cdb">
+    <div class="cdl">Founding Price Expires</div>
+    <div id="cdd"></div>
+    <div class="cdset" onclick="openModal('deadline')">Set deadline →</div>
+  </div>
+</div>
+<main>
+  <div class="nbsp">
+    <div class="nbstop">
+      <div class="nbslbl">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--te)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        <span class="nbsttl">Next Best Step</span>
+      </div>
+      <button class="ftog" id="ftog" onclick="toggleFocus()"><div class="tpill"></div>Focus Mode</button>
+    </div>
+    <div class="nbsbody" id="nbsb"><div class="nbsmt">Check off your first item to begin.</div></div>
+  </div>
+  <div class="tnav">
+    <button class="tbn active" onclick="switchTab('gtm',this)">Launch Tracker</button>
+    <button class="tbn" onclick="switchTab('sprint',this)">30-Day Sprint</button>
+    <button class="tbn" onclick="switchTab('outreach',this)">Outreach</button>
+    <button class="tbn" onclick="switchTab('content',this)">Content</button>
+    <button class="tbn" onclick="switchTab('revenue',this)">Revenue</button>
+    <button class="tbn" onclick="switchTab('biz',this)">Business Model</button>
+  </div>
+  <div id="tab-gtm" class="tp active"><div class="stages" id="stc"></div></div>
+  <div id="tab-sprint" class="tp">
+    <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
+      <div class="sectit" style="border:none;padding:0;margin:0">30-Day Launch Sprint — click a day task to add notes</div>
+    </div>
+    <div class="calg" id="calg"></div>
+  </div>
+  <div id="tab-outreach" class="tp">
+    <div class="sech">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="sectit" style="border:none;padding:0;margin:0">Outreach CRM</div>
+        <button class="btn bts" onclick="addCRM()">+ Add Contact</button>
+      </div>
+      <table class="crmt"><thead><tr><th>Name</th><th>Platform</th><th>Date</th><th>Notes</th><th>Status</th><th></th></tr></thead><tbody id="crmb"></tbody></table>
+      <button class="arb" onclick="addCRM()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add contact</button>
+    </div>
+    <div class="sech">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="sectit" style="border:none;padding:0;margin:0">Partnership Hit List</div>
+        <button class="btn bts" onclick="addPR()">+ Add Partner</button>
+      </div>
+      <table class="crmt"><thead><tr><th>Name / Handle</th><th>Platform</th><th>Audience</th><th>Angle — Why Them?</th><th>Status</th><th></th></tr></thead><tbody id="prb"></tbody></table>
+      <button class="arb" onclick="addPR()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add partner</button>
+    </div>
+  </div>
+  <div id="tab-content" class="tp">
+    <div style="margin-bottom:26px">
+      <div class="bmh">Content Bank — 10 LinkedIn Post Hooks</div>
+      <div class="hkgrid" id="hkg"></div>
+    </div>
+    <div style="margin-bottom:26px">
+      <div class="bmh">Objection Bank — Know your answers cold</div>
+      <div class="objl" id="objl"></div>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="bmh" style="border:none;padding:0;margin:0">Social Proof Log</div>
+        <button class="btn bts" onclick="toggleSPF()">+ Add Testimonial</button>
+      </div>
+      <div class="spaddf" id="spf" style="display:none;margin-bottom:14px">
+        <textarea id="spq" placeholder="Paste the testimonial..."></textarea>
+        <div class="sarow"><input type="text" id="spa" placeholder="Name"><input type="text" id="spr" placeholder="Role / Title"><button class="btn btp" onclick="addSP()">Add</button></div>
+      </div>
+      <div class="spgrid" id="spg"></div>
+    </div>
+  </div>
+  <div id="tab-revenue" class="tp">
+    <div class="bmsec">
+      <div class="bmh">Weekly Metrics Snapshot — Fill in every Sunday</div>
+      <table class="mett"><thead><tr><th>Week</th><th style="text-align:right">Gumroad Visits</th><th style="text-align:right">Sales</th><th style="text-align:right">Revenue</th><th style="text-align:right">Conv %</th><th>Top Source</th></tr></thead><tbody id="metb"></tbody></table>
+    </div>
+  </div>
+  <div id="tab-biz" class="tp">
+    <div class="bmsec">
+      <div class="bmh">Business Model Canvas</div>
+      <div class="bmcw">
+        <div class="bmct">
+          <div class="bmcc kp"><div class="bml">Key Partners</div><textarea data-bmc="kp" placeholder="e.g. Anthropic, Gumroad, Kit, Loom"></textarea></div>
+          <div class="bmcc"><div class="bml">Key Activities</div><textarea data-bmc="ka" placeholder="e.g. Content marketing, community seeding"></textarea></div>
+          <div class="bmcc vp"><div class="bml">★ Value Propositions</div><textarea data-bmc="vp" placeholder="What value do you deliver?"></textarea></div>
+          <div class="bmcc"><div class="bml">Customer Relationships</div><textarea data-bmc="cr" placeholder="e.g. Self-service, community, personal support"></textarea></div>
+          <div class="bmcc cs"><div class="bml">Customer Segments</div><textarea data-bmc="cs" placeholder="e.g. Senior designers, strategists, consultants"></textarea></div>
+          <div class="bmcc" style="grid-column:2"><div class="bml">Key Resources</div><textarea data-bmc="kr" placeholder="e.g. The tool, your expertise, your story"></textarea></div>
+          <div class="bmcc" style="grid-column:4"><div class="bml">Channels</div><textarea data-bmc="ch" placeholder="e.g. LinkedIn, Slack, Gumroad, Kit email"></textarea></div>
+        </div>
+        <div class="bmcb">
+          <div class="bmcc"><div class="bml">Cost Structure</div><textarea data-bmc="cost" placeholder="e.g. Domain, Gumroad fees, your time"></textarea></div>
+          <div class="bmcc"><div class="bml">Revenue Streams</div><textarea data-bmc="rev" placeholder="e.g. $97 one-time, $47 launch, $297 cohort"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="bmsec">
+      <div class="bmh">Positioning Statement</div>
+      <div class="posb"><div class="posl">For [audience] who [problem], [product] is a [category] that [benefit]. Unlike [competitor], [product] [differentiator].</div><textarea data-biz="pos" placeholder="Write your positioning statement here..."></textarea></div>
+    </div>
+    <div class="bmsec">
+      <div class="bmh">Value Propositions</div>
+      <div class="vpgrid">
+        <div class="vpc"><div class="vpn">01</div><textarea data-vp="0" placeholder="Value proposition 1"></textarea></div>
+        <div class="vpc"><div class="vpn">02</div><textarea data-vp="1" placeholder="Value proposition 2"></textarea></div>
+        <div class="vpc"><div class="vpn">03</div><textarea data-vp="2" placeholder="Value proposition 3"></textarea></div>
+      </div>
+    </div>
+    <div class="bmsec">
+      <div class="bmh">Buyer Personas</div>
+      <div class="psgrid">
+        <div class="psc"><input class="psn" data-ps="0-name" placeholder="Persona Name"><textarea class="psb" data-ps="0-body" placeholder="Role, pain points, where they hang out, objections..."></textarea></div>
+        <div class="psc"><input class="psn" data-ps="1-name" placeholder="Persona Name"><textarea class="psb" data-ps="1-body" placeholder="Role, pain points, where they hang out, objections..."></textarea></div>
+        <div class="psc"><input class="psn" data-ps="2-name" placeholder="Persona Name"><textarea class="psb" data-ps="2-body" placeholder="Role, pain points, where they hang out, objections..."></textarea></div>
+        <div class="psc"><input class="psn" data-ps="3-name" placeholder="Persona Name"><textarea class="psb" data-ps="3-body" placeholder="Role, pain points, where they hang out, objections..."></textarea></div>
+        <div class="psc"><input class="psn" data-ps="4-name" placeholder="Persona Name"><textarea class="psb" data-ps="4-body" placeholder="Role, pain points, where they hang out, objections..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const STAGES=[
+  {id:'pos',title:'Positioning & Pricing',color:'#0FD98A',desc:'Lock in your position before building anything else.',items:[
+    {id:'p1',text:'Reframe BYOK as a privacy feature — "you control your data"',time:'30 min'},
+    {id:'p2',text:'Write your positioning statement (→ Business Model tab)',time:'1 hr'},
+    {id:'p3',text:'Confirm launch price: $47 for first 50 buyers',time:'10 min'},
+    {id:'p4',text:'Confirm full price: $97 one-time — no subscription at launch',time:'10 min'},
+    {id:'p5',text:'Write 2–3 sentences on what makes you different from resume SaaS tools',time:'20 min'},
+    {id:'p6',text:'Draft plain-language BYOK explanation for your landing page',time:'30 min'},
+  ]},
+  {id:'dist',title:'Distribution Stack',color:'#4F8EF7',desc:'Five tools. Nothing else until this is done.',items:[
+    {id:'d1',text:'Create seller account on Gumroad',time:'15 min',link:'https://gumroad.com',ll:'Gumroad ↗'},
+    {id:'d2',text:'Create free account on Kit (formerly ConvertKit)',time:'15 min',link:'https://kit.com',ll:'Kit ↗'},
+    {id:'d3',text:'Download and set up Loom for screen recording',time:'10 min',link:'https://loom.com',ll:'Loom ↗'},
+    {id:'d4',text:'Audit LinkedIn profile — headline, About, Featured section',time:'1 hr',link:'https://linkedin.com/in/',ll:'LinkedIn ↗'},
+    {id:'d5',text:'Join 3 Designer Slack communities (Design Buddies, SDN, Hexagon UX)',time:'30 min',link:'https://www.designbuddies.community/',ll:'Design Buddies ↗'},
+    {id:'d6',text:'Join 3 LinkedIn groups: Service Design, UX Careers, Design Leadership',time:'20 min',link:'https://www.linkedin.com/groups/',ll:'LinkedIn Groups ↗'},
+  ]},
+  {id:'lp',title:'Landing Page',color:'#9B6DFF',desc:'Copy first, design second. You can sell from Gumroad alone.',items:[
+    {id:'l1',text:'Choose URL: custom domain on GoDaddy OR gumroad.com/l/[slug]',time:'20 min',link:'https://godaddy.com',ll:'GoDaddy ↗'},
+    {id:'l2',text:'Finalize headline: "Stop Getting Ghosted. Land the Role You\'re Actually Qualified For."',time:'15 min'},
+    {id:'l3',text:'Write subhead — 1 sentence on exactly who this is for',time:'20 min'},
+    {id:'l4',text:'Write 3 problem bullets: ghosted / ATS / generic cover letters',time:'30 min'},
+    {id:'l5',text:'Write 5 feature → benefit pairs (lead with benefit, not feature)',time:'1 hr'},
+    {id:'l6',text:'Write your founder social proof quote in first person',time:'20 min'},
+    {id:'l7',text:'Write the BYOK plain-language explanation (no jargon)',time:'20 min'},
+    {id:'l8',text:'Write CTA copy: "Get Instant Access — $47"',time:'15 min'},
+    {id:'l9',text:'Write 3 FAQ answers: no coding / API ~$5 / knowledge work industries',time:'30 min'},
+    {id:'l10',text:'Record 3-min Loom demo — show resume analysis + print output live',time:'2 hrs',link:'https://loom.com',ll:'Loom ↗'},
+    {id:'l11',text:'Embed Loom in your Gumroad product page',time:'15 min',link:'https://gumroad.com',ll:'Gumroad ↗'},
+  ]},
+  {id:'launch',title:'First 3 Moves This Week',color:'#F5A623',desc:'Ship before it\'s perfect. Revenue validates faster than polish.',items:[
+    {id:'m1',text:'Move 1 — Upload HTML to Gumroad. Set price $47/$97. Write description.',time:'45 min',link:'https://gumroad.com',ll:'Gumroad ↗'},
+    {id:'m2',text:'Move 1 — Publish the Gumroad listing live',time:'5 min',link:'https://gumroad.com',ll:'Go live ↗'},
+    {id:'m3',text:'Move 2 — Draft LinkedIn story post: peer voice, no hype, link in comments',time:'45 min',link:'https://linkedin.com',ll:'LinkedIn ↗'},
+    {id:'m4',text:'Move 2 — Post on LinkedIn Tuesday morning',time:'5 min',link:'https://linkedin.com',ll:'LinkedIn ↗'},
+    {id:'m5',text:'Move 3 — DM 10 warm contacts: $47 + testimonial ask',time:'1 hr',link:'https://linkedin.com/messaging/',ll:'LinkedIn DMs ↗'},
+    {id:'m6',text:'Move 3 — Post to 3 Designer Slack communities (peer framing)',time:'30 min'},
+    {id:'m7',text:'Move 3 — Post to 3 LinkedIn groups',time:'20 min',link:'https://www.linkedin.com/groups/',ll:'LinkedIn Groups ↗'},
+  ]},
+  {id:'risk',title:'Ongoing & Risk Mitigation',color:'#F05A6A',desc:'Each one is a revenue ceiling or a trust bomb.',items:[
+    {id:'r1',text:'Create BYOK setup video walkthrough — 5 min screen recording, not text',time:'2 hrs',link:'https://loom.com',ll:'Loom ↗'},
+    {id:'r2',text:'Set up Kit welcome sequence — delivers setup instructions on purchase',time:'1 hr',link:'https://kit.com',ll:'Kit ↗'},
+    {id:'r3',text:'Collect first 5 testimonials — personal outreach within 2 weeks of purchase',time:'ongoing'},
+    {id:'r4',text:'Check Gumroad analytics weekly — where are people dropping off?',time:'weekly',link:'https://gumroad.com',ll:'Gumroad ↗'},
+    {id:'r5',text:'Subscribe to Anthropic API changelog for breaking changes',time:'monthly',link:'https://docs.anthropic.com/en/release-notes/api',ll:'API Changelog ↗'},
+    {id:'r6',text:'Plan cohort/workshop at $297 — target at 50 customers',time:'future'},
+    {id:'r7',text:'Gut-check: Are new features for you, or for what converts?',time:'ongoing'},
+  ]},
+];
+const CAL=[
+  {d:1,t:'Publish Gumroad listing. Share in 3 places. Go live today — not tomorrow.'},
+  {d:2,t:'Write + post LinkedIn story post. "I built this for myself." Peer voice, no hype.'},
+  {d:3,t:'DM 10 warm contacts. Offer $47 + testimonial ask. Keep it personal.'},
+  {d:4,t:'Post in 3 Designer Slack communities. Frame as sharing something you built.'},
+  {d:5,t:'Follow up with anyone who engaged on Day 2 post. Reply to every comment.'},
+  {d:6,t:'Post in 3 LinkedIn groups.'},
+  {d:7,t:'Review Gumroad analytics. Note views vs. sales. What\'s the drop-off point?'},
+  {d:8,t:'LinkedIn post #2 — share a specific result from using the tool on your own search.'},
+  {d:9,t:'DM 10 more contacts. Track all of them in the Outreach CRM tab.'},
+  {d:10,t:'Record + publish your BYOK setup video. 5 minutes. Loom is fine.'},
+  {d:11,t:'Build your Partnership Hit List. Identify 10 career coaches or design educators.'},
+  {d:12,t:'Reach out to 3 partnership prospects. Personal note — not a pitch.'},
+  {d:13,t:'Follow up with Day 3 DMs who didn\'t respond.'},
+  {d:14,t:'PRICE CHECK: 50+ sales? Raise to $97. Under 50? Keep $47 and investigate why.'},
+  {d:15,t:'LinkedIn post #3 — objection-buster: "You don\'t need to be technical."'},
+  {d:16,t:'Add first 3 testimonials to Gumroad page. Social proof is your highest-ROI move.'},
+  {d:17,t:'DM 10 more contacts. You\'re now at 30 total.'},
+  {d:18,t:'Reach out to 3 more partnership prospects.'},
+  {d:19,t:'LinkedIn post #4 — social proof post. Quote a buyer result (with permission).'},
+  {d:20,t:'Check Kit email sequence. Is it delivering? Are buyers replying?'},
+  {d:21,t:'Mid-sprint review. Revenue check. On pace? If not, double DM outreach.'},
+  {d:22,t:'LinkedIn post #5 — behind the scenes. How you built this during your own search.'},
+  {d:23,t:'DM 10 more contacts. 40 total outreach.'},
+  {d:24,t:'Pitch 1 newsletter or podcast. Your personal story is the hook.'},
+  {d:25,t:'LinkedIn post #6 — urgency post. "X days left at founding price." Hard deadline.'},
+  {d:26,t:'Follow up with all partnership prospects who haven\'t responded.'},
+  {d:27,t:'Draft your cohort/workshop concept. What would $297 get someone?'},
+  {d:28,t:'LinkedIn post #7 — final deadline push. Last 48 hours at $47.'},
+  {d:29,t:'Email your full buyer list. Personal note asking for testimonials + referrals.'},
+  {d:30,t:'REVENUE REVIEW. Did you hit $10K? Celebrate every win. Plan Sprint 2.'},
+];
+const HOOKS=[
+  'I\'ve been in job search for [X months]. I\'m a [title] with [X] years and an MBA. I was still getting ghosted. So I built the tool I couldn\'t find.',
+  'The job market isn\'t broken. Your application strategy is. Here\'s what most senior practitioners get wrong.',
+  'I got ghosted [X] times in 30 days. Here\'s the one thing I changed that started getting responses.',
+  'What ATS software actually does to your resume — and why most advice about it is wrong.',
+  'Senior [title], [X] years of experience, MBA. Still getting rejected. I finally figured out why.',
+  'A $97 question: Is an AI job search tool actually worth it? My honest breakdown.',
+  'I built the tool I couldn\'t find anywhere else. Here\'s exactly what\'s in it.',
+  'One thing I wish I knew before my last job search that would have saved me 3 months.',
+  'Why your cover letter is getting you ghosted — and the exact fix that works at the senior level.',
+  'Job search fatigue is real. Here\'s the system that got me out of the fog and into momentum.',
+];
+const OBJS=[
+  {q:'What\'s an API key? I\'m not technical.',h:'This is your #1 objection. Make your answer sound like setting up a Netflix account — not a technical tutorial.'},
+  {q:'Can\'t I just use ChatGPT or Claude directly?',h:'Yes they can — but they won\'t. Frame it as the difference between a recipe and a professional kitchen. You\'ve already done the setup work.'},
+  {q:'Is $97 really worth it for a job search tool?',h:'Anchor against the cost of one more month unemployed. At $150K, that\'s $12,500. $97 is a rounding error.'},
+  {q:'Does it work for my industry or role?',h:'Scope it clearly: knowledge work, professional services, creative and strategy roles. Be honest about what it\'s not built for.'},
+  {q:'What if the AI makes something up or gives bad advice?',h:'Position them as the expert, the tool as the assistant. Everything is editable, nothing gets sent without their approval.'},
+];
+let S={checks:{},notes:{},bmc:{},pos:'',vps:['','',''],personas:Array(5).fill(null).map(()=>({name:'',body:''})),rev:{cur:0,goal:10000,dl:''},outreach:[],partners:[],sp:[],hooks:HOOKS.map(()=>({txt:'',st:'draft'})),objs:OBJS.map(()=>''),metrics:[{w:'Week 1',v:'',s:'',r:'',src:''},{w:'Week 2',v:'',s:'',r:'',src:''},{w:'Week 3',v:'',s:'',r:'',src:''},{w:'Week 4',v:'',s:'',r:'',src:''}],cal:{}};
+let svTmr=null,gistId=localStorage.getItem('ss_gid')||'',mMode='',cdInt=null;
+function init(){
+  const t=localStorage.getItem('ss_tok');if(t)document.getElementById('tok').value=t;
+  document.getElementById('tok').addEventListener('change',e=>localStorage.setItem('ss_tok',e.target.value));
+  renderStages();renderCal();renderHooks();renderObjs();renderMetrics();bindBiz();
+  updateNBS();updateGP();updateRev();startCD();
+}
+function renderStages(){
+  const c=document.getElementById('stc');c.innerHTML='';
+  STAGES.forEach((st,si)=>{
+    const dn=getStageDn(st),tot=st.items.length,pct=tot>0?dn/tot:0,off=125.7-(pct*125.7),all=dn===tot;
+    const el=document.createElement('div');el.className='sc';el.id='sc-'+st.id;
+    el.innerHTML=`<div class="sh" onclick="togStage('${st.id}')">
+      <div class="rw"><svg width="48" height="48" viewBox="0 0 48 48"><circle class="rbg" cx="24" cy="24" r="20"/><circle class="rfg" id="rfg-${st.id}" cx="24" cy="24" r="20" stroke="${st.color}" style="stroke-dashoffset:${off}"/></svg><div class="rnum" style="color:${st.color}">${String(si+1).padStart(2,'0')}</div></div>
+      <div class="sinf"><div class="seb">Stage ${si+1} of ${STAGES.length}</div><div class="sn">${st.title}</div><div class="sd">${st.desc}</div></div>
+      <div class="sstat"><div class="sfrac" style="color:${st.color}">${dn}<span style="color:var(--m);font-size:12px">/${tot}</span></div><div class="slbl">complete</div></div>
+      <svg class="chv" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="sbdy"><div class="sdiv"></div>
+      <div class="cban ${all?'show':''}" id="cb-${st.id}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Stage complete!</div>
+      <div id="cl-${st.id}">${st.items.map(it=>renderCI(it,st)).join('')}</div></div>`;
+    c.appendChild(el);
+  });
+  openFirst();
+}
+function renderCI(it,st){const ck=S.checks[it.id],lk=it.link?`<a href="${it.link}" target="_blank" class="lchp">${it.ll}</a>`:'',nt=S.notes[it.id]||'';
+  return `<div class="ci ${ck?'dn':''}" id="ci-${it.id}"><div class="cb ${ck?'ck':''}" style="${ck?`background:${st.color};border-color:${st.color}`:''}" onclick="togCk('${it.id}','${st.id}')"></div><div class="cc"><div class="ct">${it.text}</div><div class="cmta"><span class="tchp">⏱ ${it.time}</span>${lk}<button class="ntog" onclick="togNote('${it.id}')">+ note</button></div><div class="na ${nt?'open':''}" id="na-${it.id}"><textarea placeholder="Add a note..." oninput="updNote('${it.id}',this.value)">${nt}</textarea></div></div></div>`;}
+function openFirst(){for(const s of STAGES){if(getStageDn(s)<s.items.length){const c=document.getElementById('sc-'+s.id);if(c)c.classList.add('io');break;}}}
+function getStageDn(s){return s.items.filter(i=>S.checks[i.id]).length;}
+function togStage(id){const c=document.getElementById('sc-'+id),was=c.classList.contains('io');document.querySelectorAll('.sc').forEach(x=>x.classList.remove('io'));if(!was)c.classList.add('io');}
+function togCk(iid,sid){
+  S.checks[iid]=!S.checks[iid];
+  const ci=document.getElementById('ci-'+iid),cb=ci.querySelector('.cb'),st=STAGES.find(s=>s.id===sid);
+  if(S.checks[iid]){ci.classList.add('dn');cb.classList.add('ck');cb.style.background=st.color;cb.style.borderColor=st.color;}
+  else{ci.classList.remove('dn');cb.classList.remove('ck');cb.style.background='';cb.style.borderColor='';}
+  updRing(st);updBan(st);updateGP();updateNBS();schedSave();
+  if(getStageDn(st)===st.items.length&&S.checks[iid])fireConf(st.color);
+}
+function updRing(st){const dn=getStageDn(st),tot=st.items.length,off=125.7-(dn/tot)*125.7;const r=document.getElementById('rfg-'+st.id);if(r)r.style.strokeDashoffset=off;const c=document.getElementById('sc-'+st.id);if(c){const f=c.querySelector('.sfrac');if(f)f.innerHTML=`${dn}<span style="color:var(--m);font-size:12px">/${tot}</span>`;}}
+function updBan(st){const b=document.getElementById('cb-'+st.id);if(b){if(getStageDn(st)===st.items.length)b.classList.add('show');else b.classList.remove('show');}}
+function togNote(id){document.getElementById('na-'+id).classList.toggle('open');}
+function updNote(id,v){S.notes[id]=v;schedSave();}
+function renderCal(){
+  const g=document.getElementById('calg');g.innerHTML='';
+  CAL.forEach(day=>{
+    const dc=S.cal[day.d]||{dn:false,nt:''};
+    const div=document.createElement('div');div.className='dayc'+(dc.dn?' dn':'');div.id='dy-'+day.d;
+    div.innerHTML=`<div class="daychk ${dc.dn?'dn':''}" onclick="togDay(${day.d},event)"></div><div class="daynum" style="color:${dc.dn?'var(--m)':'var(--ab)'}">${day.d}</div><div class="daytsk" onclick="togDayNote(${day.d})">${day.t}</div><div class="dn-area"><textarea placeholder="Notes..." oninput="updDayNote(${day.d},this.value)">${dc.nt||''}</textarea></div>`;
+    g.appendChild(div);
+  });
+}
+function togDay(d,e){e.stopPropagation();if(!S.cal[d])S.cal[d]={dn:false,nt:''};S.cal[d].dn=!S.cal[d].dn;const c=document.getElementById('dy-'+d),chk=c.querySelector('.daychk');if(S.cal[d].dn){c.classList.add('dn');chk.classList.add('dn');}else{c.classList.remove('dn');chk.classList.remove('dn');}schedSave();}
+function togDayNote(d){document.getElementById('dy-'+d).classList.toggle('no');}
+function updDayNote(d,v){if(!S.cal[d])S.cal[d]={dn:false,nt:''};S.cal[d].nt=v;schedSave();}
+const CSTS=['Not Yet','Sent','Responded','Converted','Pass'];
+const PSTS=['Identified','Contacted','Replied','Partnership Active','Not a Fit'];
+function addCRM(data){
+  const id=data?.id||Date.now().toString();
+  const row={id,name:data?.name||'',platform:data?.platform||'',date:data?.date||'',notes:data?.notes||'',status:data?.status||'Not Yet'};
+  if(!data)S.outreach.push(row);
+  const tb=document.getElementById('crmb'),tr=document.createElement('tr');tr.id='crm-'+id;
+  tr.innerHTML=`<td><input class="crmi" value="${row.name}" placeholder="Name" oninput="updCRM('${id}','name',this.value)"></td><td><input class="crmi" value="${row.platform}" placeholder="LinkedIn / Slack" oninput="updCRM('${id}','platform',this.value)" style="width:110px"></td><td><input class="crmi" value="${row.date}" placeholder="MM/DD" oninput="updCRM('${id}','date',this.value)" style="width:60px"></td><td><input class="crmi" value="${row.notes}" placeholder="Notes..." oninput="updCRM('${id}','notes',this.value)"></td><td><select class="ssel" onchange="updCRM('${id}','status',this.value)">${CSTS.map(s=>`<option ${s===row.status?'selected':''}>${s}</option>`).join('')}</select></td><td><button class="dbn" onclick="delCRM('${id}')">×</button></td>`;
+  tb.appendChild(tr);if(!data)schedSave();
+}
+function updCRM(id,f,v){const r=S.outreach.find(x=>x.id===id);if(r)r[f]=v;schedSave();}
+function delCRM(id){S.outreach=S.outreach.filter(x=>x.id!==id);document.getElementById('crm-'+id)?.remove();schedSave();}
+function addPR(data){
+  const id=data?.id||Date.now().toString()+'p';
+  const row={id,name:data?.name||'',platform:data?.platform||'',audience:data?.audience||'',angle:data?.angle||'',status:data?.status||'Identified'};
+  if(!data)S.partners.push(row);
+  const tb=document.getElementById('prb'),tr=document.createElement('tr');tr.id='pr-'+id;
+  tr.innerHTML=`<td><input class="crmi" value="${row.name}" placeholder="@handle or Name" oninput="updPR('${id}','name',this.value)"></td><td><input class="crmi" value="${row.platform}" placeholder="LinkedIn / Newsletter" oninput="updPR('${id}','platform',this.value)" style="width:110px"></td><td><input class="crmi" value="${row.audience}" placeholder="5K" oninput="updPR('${id}','audience',this.value)" style="width:60px;text-align:right"></td><td><input class="crmi" value="${row.angle}" placeholder="Why them? What's the pitch?" oninput="updPR('${id}','angle',this.value)"></td><td><select class="ssel" onchange="updPR('${id}','status',this.value)">${PSTS.map(s=>`<option ${s===row.status?'selected':''}>${s}</option>`).join('')}</select></td><td><button class="dbn" onclick="delPR('${id}')">×</button></td>`;
+  tb.appendChild(tr);if(!data)schedSave();
+}
+function updPR(id,f,v){const r=S.partners.find(x=>x.id===id);if(r)r[f]=v;schedSave();}
+function delPR(id){S.partners=S.partners.filter(x=>x.id!==id);document.getElementById('pr-'+id)?.remove();schedSave();}
+function renderHooks(){
+  const g=document.getElementById('hkg');g.innerHTML='';
+  HOOKS.forEach((h,i)=>{
+    const hs=S.hooks[i]||{txt:'',st:'draft'};
+    const div=document.createElement('div');div.className='hkcard';
+    div.innerHTML=`<div class="hknum">${String(i+1).padStart(2,'0')}</div><div class="hksug">${h}</div><textarea placeholder="Customize for your voice..." oninput="updHk(${i},this.value)">${hs.txt}</textarea><div class="hkst"><span class="hs ${hs.st==='draft'?'ad':''}" onclick="setHkSt(${i},'draft')">Draft</span><span class="hs ${hs.st==='ready'?'ar':''}" onclick="setHkSt(${i},'ready')">Ready</span><span class="hs ${hs.st==='posted'?'ap':''}" onclick="setHkSt(${i},'posted')">Posted</span></div>`;
+    g.appendChild(div);
+  });
+}
+function updHk(i,v){if(!S.hooks[i])S.hooks[i]={txt:'',st:'draft'};S.hooks[i].txt=v;schedSave();}
+function setHkSt(i,st){if(!S.hooks[i])S.hooks[i]={txt:'',st:'draft'};S.hooks[i].st=st;const c=document.getElementById('hkg').children[i];c.querySelectorAll('.hs').forEach(s=>s.className='hs');c.querySelectorAll('.hs').forEach(s=>{const map={draft:'ad',ready:'ar',posted:'ap'};if(s.textContent.toLowerCase()===st)s.className='hs '+map[st];});schedSave();}
+function renderObjs(){
+  const l=document.getElementById('objl');l.innerHTML='';
+  OBJS.forEach((o,i)=>{
+    const sv=S.objs[i]||'';
+    const div=document.createElement('div');div.className='objc';
+    div.innerHTML=`<div><div class="objq">"${o.q}"</div><div class="objh">${o.h}</div></div><div><textarea placeholder="Write your answer here. Practice it until it's automatic..." oninput="updObj(${i},this.value)">${sv}</textarea></div>`;
+    l.appendChild(div);
+  });
+}
+function updObj(i,v){S.objs[i]=v;schedSave();}
+function toggleSPF(){const f=document.getElementById('spf');f.style.display=f.style.display==='none'?'block':'none';}
+function addSP(data){
+  let sp;
+  if(data){sp=data;}
+  else{const q=document.getElementById('spq').value.trim(),a=document.getElementById('spa').value.trim(),r=document.getElementById('spr').value.trim();if(!q)return;sp={id:Date.now().toString(),q,a,r};S.sp.push(sp);document.getElementById('spq').value='';document.getElementById('spa').value='';document.getElementById('spr').value='';document.getElementById('spf').style.display='none';schedSave();}
+  const g=document.getElementById('spg'),div=document.createElement('div');div.className='spcard';div.id='sp-'+sp.id;
+  div.innerHTML=`<button class="spdl" onclick="delSP('${sp.id}')">×</button><div class="spq">"${sp.q}"</div><div class="spa">${sp.a}</div><div class="spr">${sp.r}</div><button class="cpybtn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent('"'+sp.q+'" — '+sp.a+', '+sp.r)}'))" style="margin-top:9px">Copy for Gumroad</button>`;
+  g.appendChild(div);
+}
+function delSP(id){S.sp=S.sp.filter(x=>x.id!==id);document.getElementById('sp-'+id)?.remove();schedSave();}
+function renderMetrics(){
+  const tb=document.getElementById('metb');tb.innerHTML='';
+  S.metrics.forEach((m,i)=>{
+    const cv=m.v&&m.s?((parseFloat(m.s)/parseFloat(m.v))*100).toFixed(1)+'%':'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><span class="wklbl">${m.w}</span></td><td><input style="text-align:right" value="${m.v}" placeholder="—" oninput="updMet(${i},'v',this.value)"></td><td><input style="text-align:right" value="${m.s}" placeholder="—" oninput="updMet(${i},'s',this.value)"></td><td><input style="text-align:right;color:var(--em)" value="${m.r}" placeholder="$—" oninput="updMet(${i},'r',this.value)"></td><td><span class="mhi" id="cv-${i}">${cv}</span></td><td><input value="${m.src}" placeholder="LinkedIn / Slack / Referral" oninput="updMet(${i},'src',this.value)"></td>`;
+    tb.appendChild(tr);
+  });
+}
+function updMet(i,f,v){S.metrics[i][f]=v;const el=document.getElementById('cv-'+i);if(el){const m=S.metrics[i];el.textContent=m.v&&m.s?((parseFloat(m.s)/parseFloat(m.v))*100).toFixed(1)+'%':'—';}schedSave();}
+function updateRev(){
+  const cur=S.rev.cur,goal=S.rev.goal,pct=Math.min(100,(cur/goal)*100),rem=Math.max(0,goal-cur);
+  document.getElementById('rvn').textContent=cur.toLocaleString();
+  document.getElementById('rvgn').textContent=goal.toLocaleString();
+  document.getElementById('rvb').style.width=pct+'%';
+  document.getElementById('rvp').textContent=`${pct.toFixed(1)}% of goal · $${rem.toLocaleString()} to go`;
+  if(cur>=goal)fireConf('#0FD98A');
+}
+function startCD(){if(cdInt)clearInterval(cdInt);updCD();cdInt=setInterval(updCD,1000);}
+function updCD(){
+  const disp=document.getElementById('cdd'),dl=S.rev.dl;
+  if(!dl){disp.innerHTML='<span style="font-size:11px;color:var(--m)">No deadline set</span>';return;}
+  const diff=new Date(dl)-new Date();
+  if(diff<=0){disp.innerHTML='<span class="cdexp">DEADLINE PASSED</span>';return;}
+  const days=Math.floor(diff/86400000),hrs=Math.floor((diff%86400000)/3600000),mins=Math.floor((diff%3600000)/60000);
+  const col=days<=3?'var(--ru)':days<=7?'var(--ru)':'var(--ab)';
+  disp.innerHTML=`<div class="cdt"><div class="cdu"><div class="cdn" style="color:${col}">${String(days).padStart(2,'0')}</div><div class="cdul">Days</div></div><div class="cdsep">:</div><div class="cdu"><div class="cdn" style="color:${col}">${String(hrs).padStart(2,'0')}</div><div class="cdul">Hrs</div></div><div class="cdsep">:</div><div class="cdu"><div class="cdn" style="color:${col}">${String(mins).padStart(2,'0')}</div><div class="cdul">Min</div></div></div>`;
+}
+function openModal(mode){
+  mMode=mode;
+  const t={amount:'Update Revenue Total',goal:'Change Goal',deadline:'Set Founding Price Deadline'};
+  const p={amount:'Enter current total (e.g. 470)',goal:'Enter goal (e.g. 10000)',deadline:''};
+  document.getElementById('mttl').textContent=t[mode];
+  const inp=document.getElementById('minp');inp.placeholder=p[mode]||'';
+  inp.type=mode==='deadline'?'datetime-local':'number';
+  inp.value=mode==='amount'?S.rev.cur:mode==='goal'?S.rev.goal:S.rev.dl||'';
+  document.getElementById('modal').classList.add('open');setTimeout(()=>inp.focus(),80);
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function confirmModal(){
+  const v=document.getElementById('minp').value;
+  if(mMode==='amount')S.rev.cur=parseFloat(v)||0;
+  else if(mMode==='goal')S.rev.goal=parseFloat(v)||10000;
+  else if(mMode==='deadline')S.rev.dl=v;
+  closeModal();updateRev();startCD();schedSave();
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.getElementById('minp').addEventListener('keydown',e=>{if(e.key==='Enter')confirmModal();if(e.key==='Escape')closeModal();});
+function updateNBS(){
+  const b=document.getElementById('nbsb');
+  let nx=null;
+  outer:for(const s of STAGES){for(const it of s.items){if(!S.checks[it.id]){nx={it,s};break outer;}}}
+  if(!nx){b.innerHTML='<div class="nbstxt" style="color:var(--em)">All launch tasks complete — you shipped!</div>';return;}
+  b.innerHTML=`<span class="nbsbadge" style="color:${nx.s.color}">${nx.s.title.toUpperCase()}</span><span class="nbstxt">${nx.it.text}</span>`;
+}
+function updateGP(){const tot=STAGES.reduce((a,s)=>a+s.items.length,0),dn=STAGES.reduce((a,s)=>a+getStageDn(s),0);document.getElementById('gpf').style.width=((dn/tot)*100)+'%';}
+function bindBiz(){
+  document.querySelectorAll('[data-bmc]').forEach(el=>el.addEventListener('input',e=>{S.bmc[e.target.dataset.bmc]=e.target.value;schedSave();}));
+  const p=document.querySelector('[data-biz="pos"]');if(p)p.addEventListener('input',e=>{S.pos=e.target.value;schedSave();});
+  document.querySelectorAll('[data-vp]').forEach(el=>el.addEventListener('input',e=>{S.vps[parseInt(e.target.dataset.vp)]=e.target.value;schedSave();}));
+  document.querySelectorAll('[data-ps]').forEach(el=>el.addEventListener('input',e=>{const[i,f]=e.target.dataset.ps.split('-');S.personas[parseInt(i)][f]=e.target.value;schedSave();}));
+}
+function switchTab(id,btn){document.querySelectorAll('.tbn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('tab-'+id).classList.add('active');}
+function toggleFocus(){const b=document.getElementById('ftog');b.classList.toggle('on');document.body.classList.toggle('fm');}
+function fireConf(color){
+  const cv=document.getElementById('cc'),ctx=cv.getContext('2d');cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const cols=[color,'#fff','#E2E8F0','#9B6DFF','#4F8EF7'];
+  const ps=Array.from({length:80},()=>({x:Math.random()*cv.width,y:-10-Math.random()*70,w:5+Math.random()*6,h:3+Math.random()*5,c:cols[Math.floor(Math.random()*cols.length)],vx:-2+Math.random()*4,vy:3+Math.random()*4,rot:Math.random()*360,vr:-4+Math.random()*8,op:1}));
+  let f=0;(function draw(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{ctx.save();ctx.globalAlpha=p.op;ctx.translate(p.x+p.w/2,p.y+p.h/2);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;if(f>50)p.op-=0.018;});f++;if(f<120)requestAnimationFrame(draw);else ctx.clearRect(0,0,cv.width,cv.height);})();
+}
+function getToken(){return document.getElementById('tok').value.trim();}
+function setSS(cls,txt){document.getElementById('sdt').className='sdt '+cls;document.getElementById('stxt').textContent=txt;}
+async function saveToGist(){
+  const token=getToken();if(!token){alert('Paste your GitHub Personal Access Token first.');return;}
+  setSS('saving','Saving…');
+  try{
+    const url=gistId?`https://api.github.com/gists/${gistId}`:'https://api.github.com/gists';
+    const res=await fetch(url,{method:gistId?'PATCH':'POST',headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({description:'Super Shipper Data',public:false,files:{'super-shipper-data.json':{content:JSON.stringify(S,null,2)}}})});
+    if(!res.ok)throw new Error('GitHub API '+res.status);
+    const data=await res.json();gistId=data.id;localStorage.setItem('ss_gid',gistId);localStorage.setItem('ss_tok',token);
+    setSS('saved','Saved ✓');setTimeout(()=>setSS('','Auto-saves on'),3000);
+  }catch(e){setSS('error','Save failed');alert('Save failed. Check token has gist scope.\n'+e.message);}
+}
+async function loadFromGist(){
+  const token=getToken();if(!token){alert('Paste your GitHub Personal Access Token first.');return;}
+  setSS('saving','Loading…');
+  try{
+    let id=gistId;
+    if(!id){const lr=await fetch('https://api.github.com/gists?per_page=100',{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});const gs=await lr.json();const f=gs.find(g=>g.description==='Super Shipper Data');if(f){id=f.id;gistId=id;localStorage.setItem('ss_gid',id);}}
+    if(!id){setSS('','No save found');alert('No Super Shipper save found in your Gists.');return;}
+    const res=await fetch(`https://api.github.com/gists/${id}`,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
+    const data=await res.json();const content=data.files['super-shipper-data.json']?.content;if(!content)throw new Error('Data file not found');
+    const loaded=JSON.parse(content);
+    S=Object.assign({},S,loaded);
+    if(!S.hooks||S.hooks.length!==HOOKS.length)S.hooks=HOOKS.map(()=>({txt:'',st:'draft'}));
+    if(!S.objs||S.objs.length!==OBJS.length)S.objs=OBJS.map(()=>'');
+    localStorage.setItem('ss_tok',token);populate();
+    setSS('saved','Loaded ✓');setTimeout(()=>setSS('','Auto-saves on'),3000);
+  }catch(e){setSS('error','Load failed');alert('Load failed: '+e.message);}
+}
+function populate(){
+  renderStages();renderCal();renderHooks();renderObjs();
+  document.getElementById('metb').innerHTML='';renderMetrics();
+  document.querySelectorAll('[data-bmc]').forEach(el=>{el.value=S.bmc[el.dataset.bmc]||'';});
+  const p=document.querySelector('[data-biz="pos"]');if(p)p.value=S.pos||'';
+  document.querySelectorAll('[data-vp]').forEach(el=>{el.value=S.vps[parseInt(el.dataset.vp)]||'';});
+  document.querySelectorAll('[data-ps]').forEach(el=>{const[i,f]=el.dataset.ps.split('-');el.value=S.personas[parseInt(i)]?.[f]||'';});
+  document.getElementById('crmb').innerHTML='';S.outreach.forEach(r=>addCRM(r));
+  document.getElementById('prb').innerHTML='';S.partners.forEach(r=>addPR(r));
+  document.getElementById('spg').innerHTML='';S.sp.forEach(sp=>addSP(sp));
+  updateRev();updateNBS();updateGP();startCD();
+}
+function schedSave(){if(svTmr)clearTimeout(svTmr);setSS('saving','Unsaved…');svTmr=setTimeout(()=>{const t=getToken();if(t)saveToGist();else setSS('','Unsaved (no token)');},2000);}
+init();
+</script>
+</body>
+</html>
